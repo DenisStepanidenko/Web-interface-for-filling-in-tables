@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Add personal account</title>
+</head>
+<body>
+<!-- Здесь будет страничка по созданию лицевого счёта-->
+<h1>Введите новые данные для лицевого счёта</h1>
+
+<form th:method="POST" th:action="@{/save}" th:object="${account}">
+
+    <h2>Начисления</h2>
+    <label for = "name">Enter id your personal account</label>
+    <input type="text" th:field="*{id}" id = "name">
+    <br/>
+
+    <label for = "inital saldo">Enter inital saldo</label>
+    <input type="text" th:field="*{initialSaldo}" id = "inital saldo">
+    <br/>
+
+    <label for = "chargeJanuary">Enter charge in January</label>
+    <input type="text" th:field="*{chargeJanuary}" id = "chargeJanuary">
+    <br/>
+
+    <label for = "chargeFebruary">Enter charge in February</label>
+    <input type="text" th:field="*{chargeFebruary}" id = "chargeFebruary">
+    <br/>
+
+    <label for = "chargeMarch">Enter charge in March</label>
+    <input type="text" th:field="*{chargeMarch}" id = "chargeMarch">
+    <br/>
+
+    <label for = "chargeApril">Enter charge in April</label>
+    <input type="text" th:field="*{chargeApril}" id = "chargeApril">
+    <br/>
+
+    <label for = "chargeMay">Enter charge in May</label>
+    <input type="text" th:field="*{chargeMay}" id = "chargeMay">
+    <br/>
+
+    <label for = "chargeJune">Enter charge in June</label>
+    <input type="text" th:field="*{chargeJune}" id = "chargeJune">
+    <br/>
+
+    <label for = "chargeJuly">Enter charge in July</label>
+    <input type="text" th:field="*{chargeJuly}" id = "chargeJuly">
+    <br/>
+
+    <label for = "chargeAugust">Enter charge in August</label>
+    <input type="text" th:field="*{chargeAugust}" id = "chargeAugust">
+    <br/>
+
+    <label for = "chargeSeptember">Enter charge in September</label>
+    <input type="text" th:field="*{chargeSeptember}" id = "chargeSeptember">
+    <br/>
+
+    <label for = "chargeOctober">Enter charge in October</label>
+    <input type="text" th:field="*{chargeOctober}" id = "chargeOctober">
+    <br/>
+
+    <label for = "chargeNovember">Enter charge in November</label>
+    <input type="text" th:field="*{chargeNovember}" id = "chargeNovember">
+    <br/>
+
+    <label for = "chargeDecember">Enter charge in December</label>
+    <input type="text" th:field="*{chargeDecember}" id = "chargeDecember">
+    <br/>
+
+    <h2>Платежи</h2>
+
+    <label for = "paymentJanuary">Enter payment in January</label>
+    <input type="text" th:field="*{paymentJanuary}" id = "paymentJanuary">
+    <br/>
+
+    <label for = "{paymentFebruary">Enter payment in February</label>
+    <input type="text" th:field="*{paymentFebruary}" id = "{paymentFebruary">
+    <br/>
+
+    <label for = "paymentMarch">Enter payment in March</label>
+    <input type="text" th:field="*{paymentMarch}" id = "paymentMarch">
+    <br/>
+
+    <label for = "paymentApril">Enter payment in April</label>
+    <input type="text" th:field="*{paymentApril}" id = "paymentApril">
+    <br/>
+
+    <label for = "paymentMay">Enter payment in May</label>
+    <input type="text" th:field="*{paymentMay}" id = "paymentMay">
+    <br/>
+
+    <label for = "paymentJune">Enter payment in June</label>
+    <input type="text" th:field="*{paymentJune}" id = "paymentJune">
+    <br/>
+
+    <label for = "paymentJuly">Enter payment in July</label>
+    <input type="text" th:field="*{paymentJuly}" id = "paymentJuly">
+    <br/>
+
+    <label for = "paymentAugust">Enter payment in August</label>
+    <input type="text" th:field="*{paymentAugust}" id = "paymentAugust">
+    <br/>
+
+    <label for = "paymentSeptember">Enter payment in September</label>
+    <input type="text" th:field="*{paymentSeptember}" id = "paymentSeptember">
+    <br/>
+
+    <label for = "paymentOctober">Enter payment in October</label>
+    <input type="text" th:field="*{paymentOctober}" id = "paymentOctober">
+    <br/>
+
+    <label for = "paymentNovember">Enter payment in November</label>
+    <input type="text" th:field="*{paymentNovember}" id = "paymentNovember">
+    <br/>
+
+    <label for = "paymentDecember">Enter payment in December</label>
+    <input type="text" th:field="*{paymentDecember}" id = "paymentDecember">
+
+    <br/>
+    <br/>
+    <input type = "submit" value = "Create!">
+</form>
+
+</body>
+</html>

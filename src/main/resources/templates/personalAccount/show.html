@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Reverse statement</title>
+</head>
+<body>
+<table border="1">
+    <thead>
+
+    <tr >
+        <div th:each="temp : ${dtoList.get(0).getCharges().keySet()}">
+            <th th:text="${temp}"></th>
+        </div>
+
+    </tr>
+
+    </thead>
+<!--    <tbody>-->
+<!--    <tr>-->
+<!--        <td>Ячейка 1,1</td>-->
+<!--        <td>Ячейка 1,2</td>-->
+<!--    </tr>-->
+<!--    <tr>-->
+<!--        <td>Ячейка 2,1</td>-->
+<!--        <td>Ячейка 2,2</td>-->
+<!--    </tr>-->
+<!--    </tbody>-->
+</table>
+</body>
+</html>
