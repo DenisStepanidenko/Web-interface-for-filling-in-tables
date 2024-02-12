@@ -1,12 +1,133 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Home Page</title>
+
+
+<!--  Нужные функции для JS -->
+
+    <script>
+        function saldoForm() {
+            const form = document.getElementById("saldoForm");
+            if (form.style.display === "none") {
+                form.style.display = "block";
+            } else {
+                form.style.display = "none";
+            }
+        }
+    </script>
+
+
+    <script>
+        function chargeForm() {
+            const form = document.getElementById("chargeForm");
+            if (form.style.display === "none") {
+                form.style.display = "block";
+            } else {
+                form.style.display = "none";
+            }
+        }
+    </script>
+
+    <script>
+        function paymentForm() {
+            const form = document.getElementById("paymentForm");
+            if (form.style.display === "none") {
+                form.style.display = "block";
+            } else {
+                form.style.display = "none";
+            }
+        }
+    </script>
+
+
 </head>
 <body>
-<a href="/new">Добавить все показатели по новому лицевому счёту</a>
-<br/>
-<a href="/show">Показать обратную ведомость</a>
+
+
+<!-- Кнопки -->
+<button onclick="saldoForm()">Записать сальдо</button>
+<button onclick="chargeForm()">Записать начисления</button>
+<button onclick="paymentForm()">Записать платёж</button>
+
+
+<!-- Форма для записи сальдо -->
+<form id="saldoForm" style="display: none;" th:method="POST" th:action="@{/saldo}">
+    <br/>
+    <label for="personal_accountSaldo">Введите лицевой счёт</label>
+    <input type="text" name="personal_account" id="personal_accountSaldo">
+
+    <br/>
+
+    <label for="valueSaldo">Введите значение входящего сальдо для данного лицевого счёта</label>
+    <input type="text" name="value" id="valueSaldo">
+
+    <br/>
+
+    <label for="yearSaldo">Введите год</label>
+    <input type="text" name="year" id="yearSaldo">
+
+    <button type="submit" onclick="saldoForm(); alert('Сальдо записано!')">Отправить</button>
+    <br/>
+</form>
+
+
+<!--Форма для записи начислений -->
+<form id="chargeForm" style="display: none;" th:method="POST" th:action="@{/charge}">
+    <br/>
+    <label for="personal_accountCharge">Введите лицевой счёт</label>
+    <input type="text" name="personal_account" id="personal_accountCharge">
+
+    <br/>
+
+    <label for="valueCharge">Введите значения начисления</label>
+    <input type="text" name="value" id="valueCharge">
+
+    <br/>
+
+    <label for="monthCharge">Введите месяц</label>
+    <input type="text" name="month" id="monthCharge">
+
+    <br/>
+
+    <label for="yearCharge">Введите год</label>
+    <input type="text" name="year" id="yearCharge">
+
+    <button type="submit" onclick="chargeForm(); alert('Начисление записано!')">Отправить</button>
+    <br/>
+</form>
+
+
+<!--Форма для записи платежа -->
+<form id="paymentForm" style="display: none;" th:method="POST" th:action="@{/payment}">
+    <br/>
+    <label for="personal_accountPayment">Введите лицевой счёт</label>
+    <input type="text" name="personal_account" id="personal_accountPayment">
+
+    <br/>
+
+    <label for="valuePayment">Введите значения платежа</label>
+    <input type="text" name="value" id="valuePayment">
+
+    <br/>
+
+    <label for="monthPayment">Введите месяц</label>
+    <input type="text" name="month" id="monthPayment">
+
+    <br/>
+
+    <label for="yearPayment">Введите год</label>
+    <input type="text" name="year" id="yearPayment">
+
+    <button type="submit" onclick="chargeForm(); alert('Начисление записано!')">Отправить</button>
+    <br/>
+</form>
+
+
+<!--<a href="/new">Добавить все показатели по новому лицевому счёту</a>-->
+<!--<br/>-->
+<!--<a href="/show">Показать обратную ведомость</a>-->
 </body>
 </html>
