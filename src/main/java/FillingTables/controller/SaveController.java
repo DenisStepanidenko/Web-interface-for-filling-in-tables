@@ -75,8 +75,8 @@ public class SaveController {
      * @return возвращает редирект на главную страницу
      */
     @PostMapping("/payment")
-    public String savePayment(@RequestParam("personal_account") String personalAccount, @RequestParam("value") double value, @RequestParam("year") String year, @RequestParam("month") String month) {
-
+    public String savePayment(@RequestParam("personal_account") String personalAccount, @RequestParam("value") double value, @RequestParam("year") String year, @RequestParam("month") String month) throws SQLException {
+        personalAccountService.savePayment(personalAccount , value , year , month);
         return "redirect:/home";
     }
 

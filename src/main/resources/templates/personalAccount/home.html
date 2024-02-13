@@ -42,6 +42,17 @@
         }
     </script>
 
+    <script>
+        function showForm() {
+            const form = document.getElementById("showForm");
+            if (form.style.display === "none") {
+                form.style.display = "block";
+            } else {
+                form.style.display = "none";
+            }
+        }
+    </script>
+
 
 </head>
 <body>
@@ -49,8 +60,12 @@
 
 <!-- Кнопки -->
 <button onclick="saldoForm()">Записать сальдо</button>
+<br/>
 <button onclick="chargeForm()">Записать начисления</button>
+<br/>
 <button onclick="paymentForm()">Записать платёж</button>
+<br/>
+<button onclick="showForm()">Показать обратную ведомость</button>
 
 
 <!-- Форма для записи сальдо -->
@@ -122,6 +137,16 @@
     <input type="text" name="year" id="yearPayment">
 
     <button type="submit" onclick="chargeForm(); alert('Начисление записано!')">Отправить</button>
+    <br/>
+</form>
+
+<!--Форма для запроса обратной ведомости -->
+<form id="showForm" style="display: none;" th:method="POST" th:action="@{/show}">
+    <br/>
+    <label for="year">Введите год по которому хотите посмотреть обратную ведомость</label>
+    <input type="text" name="year" id="year">
+
+    <button type="submit" onclick="showForm(); alert('Начисление записано!')">Показать</button>
     <br/>
 </form>
 

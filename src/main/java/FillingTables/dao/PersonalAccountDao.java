@@ -16,11 +16,10 @@ public class PersonalAccountDao {
     public static final String PASSWORD = "123";
     private static final Connection connection;
     public static final String SQL_FOR_SAVE_CHARGE = "INSERT INTO charges(personal_account, year, month, value) VALUES(?,?,?,?)";
-    public static final String SQL_FOR_SAVE_PAYMENTS = "INSERT INTO payments(personal_account, year, month, value) VALUES(?,?,?,?)";
+    public static final String SQL_FOR_SAVE_PAYMENT = "INSERT INTO payments(personal_account, year, month, value) VALUES(?,?,?,?)";
     public static final String SQL_FOR_SAVE_SALDO = "INSERT INTO saldo(personal_account, year, month, value) VALUES(?,?,?,?)";
-    public static final String SQL_FOR_GETTING_CHARGES = "SELECT * FROM charges ";
-    public static final String SQL_FOR_GETTING_PAYMENTS = "SELECT * FROM payments";
-    public static final String SQL_FOR_GETTING_SALDO = "SELECT * FROM saldo";
+    public static final String SQL_FOR_GETTING_SALDO_ON_PREVIOUS_MONTH = "SELECT value FROM saldo WHERE month = ? and year = ? and personal_account = ?";
+    public static final String SQL_FOR_CHANGE_SALDO = "INSERT INTO saldo(personal_account, year, month, value) values (?,?,?,?)";
 
     static {
         try {
@@ -35,41 +34,6 @@ public class PersonalAccountDao {
             throw new RuntimeException(e);
         }
     }
-
-//    public void saveCharges(ChargeDto chargeDto) {
-//        // в charge dto у нас есть id(personal_account) и значения начислений по месяцам
-//
-//        for (Map.Entry<String, Double> entry : chargeDto.getAllCharges().entrySet()) {
-//            try {
-//                PreparedStatement preparedStatement = connection.prepareStatement(SQL_FOR_SAVE_CHARGES);
-//                preparedStatement.setString(1, String.valueOf(chargeDto.getId()));
-//                preparedStatement.setString(2, "2024");
-//                preparedStatement.setString(3, entry.getKey());
-//                preparedStatement.setDouble(4, entry.getValue());
-//                preparedStatement.executeUpdate();
-//            } catch (SQLException e) {
-//                throw new RuntimeException(e);
-//            }
-//
-//        }
-//    }
-
-//    public void savePayments(PaymentDto paymentDto) {
-//        for (Map.Entry<String, Double> entry : paymentDto.getPayments().entrySet()) {
-//            try {
-//                PreparedStatement preparedStatement = connection.prepareStatement(SQL_FOR_SAVE_PAYMENTS);
-//                preparedStatement.setString(1, String.valueOf(paymentDto.getId()));
-//                preparedStatement.setString(2, "2024");
-//                preparedStatement.setString(3, entry.getKey());
-//                preparedStatement.setDouble(4, entry.getValue());
-//                preparedStatement.executeUpdate();
-//            } catch (SQLException e) {
-//                throw new RuntimeException(e);
-//            }
-//
-//        }
-//    }
-
 
     /**
      * Метод, который записывает в БД значение для изначального сальдо
@@ -90,47 +54,54 @@ public class PersonalAccountDao {
 
     /**
      * Метод, который записывает значение для начисления
+     *
      * @param personalAccount лицевой счёт
-     * @param value значение
-     * @param year год
-     * @param month месяц
+     * @param value           значение
+     * @param year            год
+     * @param month           месяц
      */
     public void saveCharge(String personalAccount, double value, String year, String month) throws SQLException {
         PreparedStatement preparedStatement = connection.prepareStatement(SQL_FOR_SAVE_CHARGE);
         preparedStatement.setString(1, personalAccount);
         preparedStatement.setString(2, year);
-        preparedStatement.setString(3,  month);
+        preparedStatement.setString(3, month);
         preparedStatement.setDouble(4, value);
         preparedStatement.executeUpdate();
     }
 
 
-//    public ResultSet getCharges() {
-//        try {
-//            Statement statement = connection.createStatement();
-//            return statement.executeQuery(SQL_FOR_GETTING_CHARGES);
-//        } catch (SQLException e) {
-//            throw new RuntimeException(e);
-//        }
-//    }
-//
-//    public ResultSet getPayments() {
-//        try {
-//            Statement statement = connection.createStatement();
-//            return statement.executeQuery(SQL_FOR_GETTING_PAYMENTS);
-//        } catch (SQLException e) {
-//            throw new RuntimeException(e);
-//        }
-//    }
-//
-//    public ResultSet getSaldo() {
-//        try {
-//            Statement statement = connection.createStatement();
-//            return statement.executeQuery(SQL_FOR_GETTING_SALDO);
-//        } catch (SQLException e) {
-//            throw new RuntimeException(e);
-//        }
-//    }
+    /**
+     * Метод, который записывает значение для платежа
+     *
+     * @param personalAccount лицевой счёт
+     * @param value           значение
+     * @param year            год
+     * @param month           месяц
+     */
+    public void savePayment(String personalAccount, double value, String year, String month) throws SQLException {
+        PreparedStatement preparedStatement = connection.prepareStatement(SQL_FOR_SAVE_PAYMENT);
+        preparedStatement.setString(1, personalAccount);
+        preparedStatement.setString(2, year);
+        preparedStatement.setString(3, month);
+        preparedStatement.setDouble(4, value);
+        preparedStatement.executeUpdate();
+    }
 
 
+    public ResultSet getPreviousSaldo(String previousMonth, String year, String personalAccount) throws SQLException {
+        PreparedStatement preparedStatement = connection.prepareStatement(SQL_FOR_GETTING_SALDO_ON_PREVIOUS_MONTH);
+        preparedStatement.setString(1, previousMonth);
+        preparedStatement.setString(2, year);
+        preparedStatement.setString(3, personalAccount);
+        return preparedStatement.executeQuery();
+    }
+
+    public void changeSaldo(String personalAccount, String month, String year, double newSaldo) throws SQLException {
+        PreparedStatement preparedStatement = connection.prepareStatement(SQL_FOR_CHANGE_SALDO);
+        preparedStatement.setString(1, personalAccount);
+        preparedStatement.setString(2, year);
+        preparedStatement.setString(3, month);
+        preparedStatement.setDouble(4, newSaldo);
+        preparedStatement.executeUpdate();
+    }
 }

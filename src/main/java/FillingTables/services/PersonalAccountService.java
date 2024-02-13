@@ -17,6 +17,23 @@ import java.util.*;
 public class PersonalAccountService {
     private final PersonalAccountDao personalAccountDao;
 
+    public static final Map<String, String> months = new HashMap<>();
+
+    static {
+        months.put("January", "inital");
+        months.put("February", "January");
+        months.put("March", "February");
+        months.put("April", "March");
+        months.put("May", "April");
+        months.put("June", "May");
+        months.put("July", "June");
+        months.put("August", "July");
+        months.put("September", "August");
+        months.put("October", "September");
+        months.put("November", "October");
+        months.put("December", "November");
+    }
+
     @Autowired
     public PersonalAccountService(PersonalAccountDao personalAccountDao) {
         this.personalAccountDao = personalAccountDao;
@@ -37,135 +54,60 @@ public class PersonalAccountService {
 
     /**
      * Метод, который вызывает DAO, который сохраняет значение для текущего начисления
+     *
      * @param personalAccount лицевой счёт
-     * @param value значение начисления
-     * @param year год
-     * @param month месяц
+     * @param value           значение начисления
+     * @param year            год
+     * @param month           месяц
      */
     public void saveCharge(String personalAccount, double value, String year, String month) throws SQLException {
         personalAccountDao.saveCharge(personalAccount, value, year, month);
+
+        /**
+         * Далее идёт код для сохранения сальдо, так как для данного
+         */
+        // теперь нужно позабиться об создании сальдо
+        // нужно к сальдо (n-1) месяца прибавить данное значение charge
+        // нужно получить сальдо на (n-1) месяц
+        // для этого нужно составить табличку(map)
+        String previousMonth = months.get(month);
+
+
+        // здесь хранится сальдо на предыдущий месяц
+        ResultSet resultSet = personalAccountDao.getPreviousSaldo(previousMonth, year, personalAccount);
+        resultSet.next();
+        double valuePreviousSaldo = resultSet.getDouble("value");
+
+        double newSaldo = valuePreviousSaldo + value; // здесь хранится новое сальдо
+
+
+        // теперь нужно изменить сальдо
+        personalAccountDao.changeSaldo(personalAccount, month, year, newSaldo);
     }
 
 
-//    /**
-//     * Метод, который сохраняет введённые данные с формы
-//     *
-//     * @param personAccount объект в котором содержится все введённые данные
-//     */
-//    public void save(PersonAccount personAccount) {
-//        // сначала сохраним начисления в БД
-//        ChargeDto chargeDto = new ChargeDto(personAccount.getId(), personAccount.getAllCharges());
-//        personalAccountDao.saveCharges(chargeDto);
-//
-//        // сохраним платежи в БД
-//        PaymentDto paymentDto = new PaymentDto(personAccount.getId(), personAccount.getAllPayments());
-//        personalAccountDao.savePayments(paymentDto);
-//
-//        // теперь нужно сформировать Map, где ключ - строка, а значение - сальдо
-//        Map<String, Double> saldo = createSaldo(personAccount.getAllCharges(), personAccount.getAllPayments(), personAccount.getInitialSaldo());
-//        SaldoDto saldoDto = new SaldoDto(personAccount.getId(), saldo);
-//        personalAccountDao.saveSaldo(saldoDto);
-//    }
+    /**
+     * Метод, который записывает платеж
+     *
+     * @param personalAccount лицевой счёт
+     * @param value           значение
+     * @param year            год
+     * @param month           месяц
+     */
+    public void savePayment(String personalAccount, double value, String year, String month) throws SQLException {
+        personalAccountDao.savePayment(personalAccount, value, year, month);
+    }
 
-//
-//    private Map<String, Double> createSaldo(Map<String, Double> charges, Map<String, Double> payments, double initialSaldo) {
-//        Map<String, Double> saldo = new HashMap<>();
-//        saldo.put("initial", initialSaldo);
-//
-//        double temp = initialSaldo;
-//
-//        for (Map.Entry<String, Double> entry : charges.entrySet()) {
-//            temp += entry.getValue();
-//            temp -= payments.get(entry.getKey());
-//            saldo.put(entry.getKey(), temp);
-//        }
-//
-//        return saldo;
-//    }
+    public List<ResultDto> createResulList(String year) {
+        // нам нужно получить по каждому из лицевого счёта -
+        // 1 - все сальдо на месяцы данного года
+        // 2 - все начисления на месяца данного года
+        // 3 - все платежи на месяц данного года
 
-
-//    public List<ResultDto> createDtoList() throws SQLException {
-//        ResultSet charges = personalAccountDao.getCharges();
-//        Map<String, Map<String, Double>> chargeAccounts = createChargeAccounts(charges);
-//
-//        ResultSet payments = personalAccountDao.getPayments();
-//        Map<String, Map<String, Double>> paymentsAccounts = createPaymentsAccounts(payments);
-//
-//        ResultSet saldo = personalAccountDao.getSaldo();
-//        Map<String, Map<String, Double>> saldoAccounts = createSaldoAccounts(saldo);
-//
-//        // теперь можно создать заключительный объект
-//        return createCommonResultDtoList(chargeAccounts, paymentsAccounts, saldoAccounts);
-//
-//    }
-
-//    private List<ResultDto> createCommonResultDtoList(Map<String, Map<String, Double>> chargeAccounts, Map<String, Map<String, Double>> paymentsAccounts, Map<String, Map<String, Double>> saldoAccounts) {
-//
-//        List<ResultDto> finalList = new LinkedList<>();
-//        for (String personalAccount : chargeAccounts.keySet()) {
-//            ResultDto resultDto = new ResultDto(personalAccount, chargeAccounts.get(personalAccount), paymentsAccounts.get(personalAccount), saldoAccounts.get(personalAccount));
-//            finalList.add(resultDto);
-//        }
-//        return finalList;
-//    }
-//
-//    private Map<String, Map<String, Double>> createSaldoAccounts(ResultSet saldo) throws SQLException {
-//        Map<String, Map<String, Double>> saldoAccounts = new LinkedHashMap<>();
-//        while (saldo.next()) {
-//            String personalAccount = saldo.getString("personal_account");
-//            String month = saldo.getString("month");
-//            double value = saldo.getDouble("value");
-//            if (saldoAccounts.containsKey(personalAccount)) {
-//                Map<String, Double> temp = saldoAccounts.get(personalAccount);
-//                temp.put(month, value);
-//                saldoAccounts.put(personalAccount, temp);
-//            } else {
-//                Map<String, Double> temp = new LinkedHashMap<>();
-//                temp.put(month, value);
-//                saldoAccounts.put(personalAccount, temp);
-//            }
-//        }
-//        return saldoAccounts;
-//    }
-//
-//    private Map<String, Map<String, Double>> createPaymentsAccounts(ResultSet payments) throws SQLException {
-//        Map<String, Map<String, Double>> paymentAccounts = new LinkedHashMap<>();
-//        while (payments.next()) {
-//            String personalAccount = payments.getString("personal_account");
-//            String month = payments.getString("month");
-//            double value = payments.getDouble("value");
-//
-//            if (paymentAccounts.containsKey(personalAccount)) {
-//                Map<String, Double> temp = paymentAccounts.get(personalAccount);
-//                temp.put(month, value);
-//                paymentAccounts.put(personalAccount, temp);
-//            } else {
-//                Map<String, Double> temp = new LinkedHashMap<>();
-//                temp.put(month, value);
-//                paymentAccounts.put(personalAccount, temp);
-//            }
-//        }
-//        return paymentAccounts;
-//    }
-//
-//    private Map<String, Map<String, Double>> createChargeAccounts(ResultSet charges) throws SQLException {
-//        Map<String, Map<String, Double>> chargeAccounts = new LinkedHashMap<>();
-//        while (charges.next()) {
-//            String personalAccount = charges.getString("personal_account");
-//            String month = charges.getString("month");
-//            double value = charges.getDouble("value");
-//            if (chargeAccounts.containsKey(personalAccount)) {
-//                Map<String, Double> temp = chargeAccounts.get(personalAccount);
-//                temp.put(month, value);
-//                chargeAccounts.put(personalAccount, temp);
-//            } else {
-//                Map<String, Double> temp = new LinkedHashMap<>();
-//                temp.put(month, value);
-//                chargeAccounts.put(personalAccount, temp);
-//            }
-//        }
-//        return chargeAccounts;
-//    }
+        // но для начала хотелось бы получить все уникальные номера лицевых счётов
+        Map<String, LinkedHashMap<String, Double>> allCharges = new HashMap<>();
+        return null;
+    }
 
 
 }

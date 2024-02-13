@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -19,18 +21,11 @@ public class ShowController {
         this.personalAccountService = personalAccountService;
     }
 
+    @PostMapping("/show")
+    public String showTable(@RequestParam("year") String year, Model model){
 
-//    @GetMapping("/show")
-//    public String show(Model model) throws SQLException {
-//        // нам нужен лист из следующего объекта:
-//        // personal_account
-//        // saldo на месяц n
-//        // начисления на месяц n
-//        // платежи на месяц n
-//        // personal_account
-//        List<ResultDto> dtoList = personalAccountService.createDtoList();
-//        System.out.println(dtoList.get(0));
-//        model.addAttribute("dtoList" , dtoList);
-//        return "personalAccount/show";
-//    }
+        List<ResultDto> resultDtoList = personalAccountService.createResulList(year);
+
+        return "redirect:/home";
+    }
 }
