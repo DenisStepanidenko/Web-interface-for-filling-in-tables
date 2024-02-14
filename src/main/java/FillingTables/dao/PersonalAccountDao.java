@@ -19,7 +19,13 @@ public class PersonalAccountDao {
     public static final String SQL_FOR_SAVE_PAYMENT = "INSERT INTO payments(personal_account, year, month, value) VALUES(?,?,?,?)";
     public static final String SQL_FOR_SAVE_SALDO = "INSERT INTO saldo(personal_account, year, month, value) VALUES(?,?,?,?)";
     public static final String SQL_FOR_GETTING_SALDO_ON_PREVIOUS_MONTH = "SELECT value FROM saldo WHERE month = ? and year = ? and personal_account = ?";
-    public static final String SQL_FOR_CHANGE_SALDO = "INSERT INTO saldo(personal_account, year, month, value) values (?,?,?,?)";
+    public static final String SQL_FOR_CHANGE_SALDO = "UPDATE saldo set value = ? where personal_account = ? and year = ? and month = ?";
+    public static final String SQL_FOR_GETTING_ALL_UNIQUE_ID = "SELECT DISTINCT saldo.personal_account FROM saldo";
+    public static final String SQL_FOR_GETTING_ALL_CHARGE_BY_YEAR = "SELECT * FROM charges where year = ?";
+    public static final String SQL_FOR_GETTING_ALL_PAYMENTS_BY_YEAR = "SELECT * FROM payments where year = ?";
+
+    public static final String SQL_FOR_GETTING_ALL_SALDO_BY_YEAR = "SELECT * FROM saldo where year = ?";
+
 
     static {
         try {
@@ -42,11 +48,11 @@ public class PersonalAccountDao {
      * @param value           значение
      * @param year            год
      */
-    public void saveSaldo(String personalAccount, double value, String year) throws SQLException {
+    public void saveSaldo(String personalAccount, double value, String year, String month) throws SQLException {
         PreparedStatement preparedStatement = connection.prepareStatement(SQL_FOR_SAVE_SALDO);
         preparedStatement.setString(1, personalAccount);
         preparedStatement.setString(2, year);
-        preparedStatement.setString(3, "inital");
+        preparedStatement.setString(3, month);
         preparedStatement.setDouble(4, value);
         preparedStatement.executeUpdate();
     }
@@ -88,20 +94,74 @@ public class PersonalAccountDao {
     }
 
 
-    public ResultSet getPreviousSaldo(String previousMonth, String year, String personalAccount) throws SQLException {
+    /**
+     * Метод, который получает значение сальдо по месяцу,году и лицевому счёту
+     *
+     * @param month           месяц
+     * @param year            год
+     * @param personalAccount лицевой счёт
+     * @return resultSet
+     */
+    public ResultSet getSaldo(String month, String year, String personalAccount) throws SQLException {
         PreparedStatement preparedStatement = connection.prepareStatement(SQL_FOR_GETTING_SALDO_ON_PREVIOUS_MONTH);
-        preparedStatement.setString(1, previousMonth);
+        preparedStatement.setString(1, month);
         preparedStatement.setString(2, year);
         preparedStatement.setString(3, personalAccount);
         return preparedStatement.executeQuery();
     }
 
+    public ResultSet getCharge(String year) {
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(SQL_FOR_GETTING_ALL_CHARGE_BY_YEAR);
+            preparedStatement.setString(1, year);
+            return preparedStatement.executeQuery();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public ResultSet getPayment(String year) {
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(SQL_FOR_GETTING_ALL_PAYMENTS_BY_YEAR);
+            preparedStatement.setString(1, year);
+            return preparedStatement.executeQuery();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+
+    public ResultSet getSaldo(String year) {
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(SQL_FOR_GETTING_ALL_SALDO_BY_YEAR);
+            preparedStatement.setString(1, year);
+            return preparedStatement.executeQuery();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+
+
+    /**
+     * Обновляет значение сальдо по году, месяц, лицевому счёту
+     *
+     * @param personalAccount лицевой счёт
+     * @param month           месяц
+     * @param year            год
+     * @param newSaldo        новое значение
+     */
     public void changeSaldo(String personalAccount, String month, String year, double newSaldo) throws SQLException {
         PreparedStatement preparedStatement = connection.prepareStatement(SQL_FOR_CHANGE_SALDO);
-        preparedStatement.setString(1, personalAccount);
-        preparedStatement.setString(2, year);
-        preparedStatement.setString(3, month);
-        preparedStatement.setDouble(4, newSaldo);
+        preparedStatement.setDouble(1, newSaldo);
+        preparedStatement.setString(2, personalAccount);
+        preparedStatement.setString(3, year);
+        preparedStatement.setString(4, month);
         preparedStatement.executeUpdate();
+    }
+
+    public ResultSet getAllUniquePersonalAccount() throws SQLException {
+        PreparedStatement preparedStatement = connection.prepareStatement(SQL_FOR_GETTING_ALL_UNIQUE_ID);
+        return preparedStatement.executeQuery();
     }
 }

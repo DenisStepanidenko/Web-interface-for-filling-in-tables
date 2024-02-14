@@ -21,11 +21,17 @@ public class ShowController {
         this.personalAccountService = personalAccountService;
     }
 
+
+    /**
+     * Контроллер, который отправляет html представление с выводом обратной ведомости
+     * @param year текущий год
+     * @param model модель, где будет храниться вся информация
+     * @return html представление
+     */
     @PostMapping("/show")
-    public String showTable(@RequestParam("year") String year, Model model){
+    public String showTable(@RequestParam("year") String year, Model model) throws SQLException {
 
         List<ResultDto> resultDtoList = personalAccountService.createResulList(year);
-
         return "redirect:/home";
     }
 }

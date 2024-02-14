@@ -4,7 +4,7 @@ import java.util.Map;
 
 public class PaymentDto {
     private int id;
-    private final Map<String,Double> payments;
+    private final Map<String, Double> payments;
 
     public PaymentDto(int id, Map<String, Double> payments) {
         this.id = id;
@@ -17,5 +17,13 @@ public class PaymentDto {
 
     public Map<String, Double> getPayments() {
         return payments;
+    }
+
+    @Override
+    public String toString() {
+        return "PaymentDto{" +
+                "id=" + id +
+                ", payments=" + payments +
+                '}';
     }
 }
