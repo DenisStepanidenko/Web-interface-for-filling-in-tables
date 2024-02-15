@@ -9,7 +9,9 @@
 <table border="1">
     <thead>
 
-    <tr >
+    <tr>
+        <th>Квартира</th>
+        <th>Входящее сальдо</th>
         <div th:each="temp : ${dtoList.get(0).getCharges().keySet()}">
             <th th:text="${temp}"></th>
         </div>
@@ -17,16 +19,14 @@
     </tr>
 
     </thead>
-<!--    <tbody>-->
-<!--    <tr>-->
-<!--        <td>Ячейка 1,1</td>-->
-<!--        <td>Ячейка 1,2</td>-->
-<!--    </tr>-->
-<!--    <tr>-->
-<!--        <td>Ячейка 2,1</td>-->
-<!--        <td>Ячейка 2,2</td>-->
-<!--    </tr>-->
-<!--    </tbody>-->
+    <tbody>
+    <tr th:each="temp : ${dtoList}">
+        <td th:text="${temp.getPersonalAccount()}"></td>
+        <td th:text="${temp.getSaldo().get('inital')}"></td>
+
+
+    </tr>
+    </tbody>
 </table>
 </body>
 </html>

@@ -30,8 +30,8 @@ public class ShowController {
      */
     @PostMapping("/show")
     public String showTable(@RequestParam("year") String year, Model model) throws SQLException {
-
         List<ResultDto> resultDtoList = personalAccountService.createResulList(year);
-        return "redirect:/home";
+        model.addAttribute("dtoList" , resultDtoList);
+        return "personalAccount/show";
     }
 }

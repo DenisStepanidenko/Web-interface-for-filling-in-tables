@@ -159,7 +159,7 @@ public class PersonalAccountService {
         }
 
     }
-    
+
     public List<ResultDto> createResulList(String year) throws SQLException {
         // нам нужно получить по каждому из лицевого счёта -
         // 1 - все сальдо на месяцы данного года
