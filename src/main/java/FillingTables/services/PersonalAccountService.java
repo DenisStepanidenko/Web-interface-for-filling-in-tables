@@ -7,9 +7,12 @@ import FillingTables.dto.ResultDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.DecimalFormat;
 import java.util.*;
+import java.util.function.BiFunction;
 
 @Service
 public class PersonalAccountService {
@@ -82,12 +85,13 @@ public class PersonalAccountService {
 
             // сохраним текущее сальдо
             double valueCurrentSaldo = currentSaldo.getDouble("value");
+            BigDecimal first = BigDecimal.valueOf(valueCurrentSaldo);
+            BigDecimal second = first.add(BigDecimal.valueOf(value));
+            // запишем новое сальдо
+
 
             // запишем новое сальдо
-            double newSaldo = valueCurrentSaldo + value;
-
-            // запишем новое сальдо
-            personalAccountDao.changeSaldo(personalAccount, month, year, newSaldo);
+            personalAccountDao.changeSaldo(personalAccount, month, year, Double.parseDouble(String.valueOf(second)));
         } else {
             // иначе сальдо ещё не записывалось, нужно найти сальдо на прошлый месяц
             ResultSet previosSaldo = personalAccountDao.getSaldo(previousMonth, year, personalAccount);
@@ -95,12 +99,11 @@ public class PersonalAccountService {
 
             // сальдо на прошлый месяц
             double valuePreviousSaldo = previosSaldo.getDouble("value");
-
+            BigDecimal first = BigDecimal.valueOf(valuePreviousSaldo);
             // новое сальдо на текущий месяц
-            double newSaldo = valuePreviousSaldo + value;
-
+            BigDecimal second = first.add(BigDecimal.valueOf(value));
             // сохраняем новое сальдо
-            personalAccountDao.saveSaldo(personalAccount, newSaldo, year, month);
+            personalAccountDao.saveSaldo(personalAccount, Double.parseDouble(String.valueOf(second)), year, month);
         }
 
     }
@@ -137,12 +140,13 @@ public class PersonalAccountService {
 
             // сохраним текущее сальдо
             double valueCurrentSaldo = currentSaldo.getDouble("value");
+            BigDecimal first = BigDecimal.valueOf(valueCurrentSaldo);
+            BigDecimal second = first.subtract(BigDecimal.valueOf(value));
+            // запишем новое сальдо
+
 
             // запишем новое сальдо
-            double newSaldo = valueCurrentSaldo - value;
-
-            // запишем новое сальдо
-            personalAccountDao.changeSaldo(personalAccount, month, year, newSaldo);
+            personalAccountDao.changeSaldo(personalAccount, month, year, Double.parseDouble(String.valueOf(second)));
         } else {
             // иначе сальдо ещё не записывалось, нужно найти сальдо на прошлый месяц
             ResultSet previosSaldo = personalAccountDao.getSaldo(previousMonth, year, personalAccount);
@@ -152,10 +156,12 @@ public class PersonalAccountService {
             double valuePreviousSaldo = previosSaldo.getDouble("value");
 
             // новое сальдо на текущий месяц
-            double newSaldo = valuePreviousSaldo - value;
+            BigDecimal first = BigDecimal.valueOf(valuePreviousSaldo);
+            BigDecimal subtract = first.subtract(BigDecimal.valueOf(value));
+
 
             // сохраняем новое сальдо
-            personalAccountDao.saveSaldo(personalAccount, newSaldo, year, month);
+            personalAccountDao.saveSaldo(personalAccount, Double.parseDouble(String.valueOf(subtract)), year, month);
         }
 
     }
@@ -269,12 +275,33 @@ public class PersonalAccountService {
                 }
             }
         }
+
         List<ResultDto> resultDtoList = new ArrayList<>();
-        // а теперь можно создавать объекты ResultDto, которые мы будем отправлять в html форму
-        for (Map.Entry<String, LinkedHashMap<String, Double>> saldoEntrySet : saldo.entrySet()) {
-            String id = saldoEntrySet.getKey();
-            resultDtoList.add(new ResultDto(id, charges.get(id), payments.get(id), saldoEntrySet.getValue()));
+
+        for (Map.Entry<String, LinkedHashMap<String, Double>> entry : charges.entrySet()) {
+            List<String> resultDescription = new ArrayList<>();
+            for (Map.Entry<String, Double> currentMonthValueCharge : entry.getValue().entrySet()) {
+                StringBuilder description = new StringBuilder();
+                description.append("Начисления:").append("\n");
+                description.append(currentMonthValueCharge.getValue()).append("\n");
+
+                // здесь хранятся все платежи
+                List<Double> currenMonthPayment = payments.get(entry.getKey()).get(currentMonthValueCharge.getKey());
+                description.append("Платежи:").append("\n");
+                for (Double v : currenMonthPayment) {
+                    description.append(v).append("\n");
+                }
+
+                Double currentMonthSaldo = saldo.get(entry.getKey()).get(currentMonthValueCharge.getKey());
+                description.append("Сальдо:").append("\n");
+                description.append(currentMonthSaldo);
+                resultDescription.add(description.toString());
+            }
+            String initialSaldo = String.valueOf(saldo.get(entry.getKey()).get("inital"));
+            ResultDto resultDto = new ResultDto(entry.getKey(), initialSaldo, resultDescription);
+            resultDtoList.add(resultDto);
         }
+
 
         return resultDtoList;
     }

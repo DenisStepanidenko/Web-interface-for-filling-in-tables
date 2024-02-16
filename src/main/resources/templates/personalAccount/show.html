@@ -10,22 +10,33 @@
     <thead>
 
     <tr>
-        <th>Квартира</th>
+        <th>Номер квартиры</th>
         <th>Входящее сальдо</th>
-        <div th:each="temp : ${dtoList.get(0).getCharges().keySet()}">
-            <th th:text="${temp}"></th>
-        </div>
-
+        <th>Январь</th>
+        <th>Февраль</th>
+        <th>Март</th>
+        <th>Апрель</th>
+        <th>Май</th>
+        <th>Июнь</th>
+        <th>Июль</th>
+        <th>Август</th>
+        <th>Сентябрь</th>
+        <th>Октябрь</th>
+        <th>Ноябрь</th>
+        <th>Декабрь</th>
     </tr>
 
     </thead>
     <tbody>
-    <tr th:each="temp : ${dtoList}">
-        <td th:text="${temp.getPersonalAccount()}"></td>
-        <td th:text="${temp.getSaldo().get('inital')}"></td>
-
-
-    </tr>
+    <div th:each="current : ${dtoList}">
+        <tr>
+            <td th:text="${current.personalAccount}"></td>
+            <td th:text="${current.getInitialSaldo()}"></td>
+            <div th:each="temp : ${current.getDescription()}">
+                <td th:text="${temp}"></td>
+            </div>
+        </tr>
+    </div>
     </tbody>
 </table>
 </body>

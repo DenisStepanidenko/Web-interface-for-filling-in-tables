@@ -7,40 +7,62 @@ import java.util.Map;
 
 public class ResultDto {
     private final String personalAccount;
-    private final LinkedHashMap<String, Double> charges;
-    private final LinkedHashMap<String, List<Double>> payments;
-    private final LinkedHashMap<String, Double> saldo;
+    private final String initialSaldo;
+    public final List<String> description;
 
-    public ResultDto(String personalAccount, LinkedHashMap<String, Double> charges, LinkedHashMap<String, List<Double>> payments, LinkedHashMap<String, Double> saldo) {
+    public ResultDto(String personalAccount, String initialSaldo, List<String> description) {
         this.personalAccount = personalAccount;
-        this.charges = charges;
-        this.payments = payments;
-        this.saldo = saldo;
+        this.initialSaldo = initialSaldo;
+        this.description = description;
     }
 
     public String getPersonalAccount() {
         return personalAccount;
     }
 
-    public LinkedHashMap<String, Double> getCharges() {
-        return charges;
+    public String getInitialSaldo() {
+        return initialSaldo;
     }
 
-    public LinkedHashMap<String, List<Double>> getPayments() {
-        return payments;
+    public List<String> getDescription() {
+        return description;
     }
 
-    public LinkedHashMap<String, Double> getSaldo() {
-        return saldo;
-    }
+
+    //    private final LinkedHashMap<String, Double> charges;
+//    private final LinkedHashMap<String, List<Double>> payments;
+//    private final LinkedHashMap<String, Double> saldo;
+
+//    public ResultDto(String personalAccount, LinkedHashMap<String, Double> charges, LinkedHashMap<String, List<Double>> payments, LinkedHashMap<String, Double> saldo) {
+//        this.personalAccount = personalAccount;
+//        this.charges = charges;
+//        this.payments = payments;
+//        this.saldo = saldo;
+//    }
+//
+//    public String getPersonalAccount() {
+//        return personalAccount;
+//    }
+//
+//    public LinkedHashMap<String, Double> getCharges() {
+//        return charges;
+//    }
+//
+//    public LinkedHashMap<String, List<Double>> getPayments() {
+//        return payments;
+//    }
+//
+//    public LinkedHashMap<String, Double> getSaldo() {
+//        return saldo;
+//    }
+
 
     @Override
     public String toString() {
         return "ResultDto{" +
                 "personalAccount='" + personalAccount + '\'' +
-                ", charges=" + charges +
-                ", payments=" + payments +
-                ", saldo=" + saldo +
+                ", initialSaldo='" + initialSaldo + '\'' +
+                ", description=" + description +
                 '}';
     }
 }
