@@ -1,13 +1,10 @@
 package FillingTables.dao;
 
-import FillingTables.dto.ChargeDto;
-import FillingTables.dto.PaymentDto;
-import FillingTables.dto.SaldoDto;
 import org.springframework.stereotype.Component;
 
 import java.sql.*;
 
-import java.util.Map;
+
 
 @Component
 public class PersonalAccountDao {
