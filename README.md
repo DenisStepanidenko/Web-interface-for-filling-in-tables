@@ -83,6 +83,49 @@ CREATE TABLE saldo -- сальдо
 ### Метод *public List<ResultDto> createResulList(String year)* :white_check_mark:
 Данный метод формирует List с объектами ResultDto для отправки их в модель для показа пользователю оборотной ведомости.
 ***
+## Класс PersonalAccountDao :ballot_box_with_check:
+Данный класс предоставляет функционал для работы с БД.
+### Метод *public void saveSaldo(String personalAccount, double value, String year, String month)* :white_check_mark:
+Данный метод записывает данные для сальдо в БД.
+### Метод *public void saveCharge(String personalAccount, double value, String year, String month)* :white_check_mark:
+Данный метод записывает данные для начисления в БД. 
+### Метод *public void savePayment(String personalAccount, double value, String year, String month)* :white_check_mark:
+Данный метод записывает данные для платежа в БД.
+### Метод *public ResultSet getSaldo(String month, String year, String personalAccount)* :white_check_mark:
+Метод, который получает значение сальдо по месяцу, году и лицевому счёту.
+### Метод *public ResultSet getCharge(String year)* :white_check_mark:
+Метод, который получает значения для всех начислений  по данному году.
+### Метод *public ResultSet getPayment(String year)* :white_check_mark:
+Метод, который получает значения для всех платежей по данному году.
+### Метод *public ResultSet getSaldo(String year)* :white_check_mark:
+Метод, который получает значения для всех сальдо по данному году.
+### Метод *public void changeSaldo(String personalAccount, String month, String year, double newSaldo)* :white_check_mark:
+Обновляет значение сальдо по году, месяц, лицевому счёту.
+### Метод *public ResultSet getAllUniquePersonalAccount()* :white_check_mark:
+Выдаёт все уникальные значения для лицевых счетов пользователей.
+***
+## Класс ResultDto :ballot_box_with_check:
+Данный класс представляет из себя информацию по каждому лицевому счёту в виде значений по платежам, сальдо и начислениям за каждый месяц данного года. Отправляется в модель для показа пользователю данных.
+
+# Пример использования :ghost:
+На странице по /home у нас доступен такой интерфейс (особого уклона в CSS и JS не было, данное задание для тренировки backend части и работой с БД)  
+
+![image](https://github.com/DenisStepanidenko/Web-interface-for-filling-in-tables/assets/110686828/76ce4ed7-da66-4783-aa00-83100dbd633c)
+
+На каждую кнопочку можно нажать и высветится форма для заполения информации, например , откроем форму для заполнения начисления  
+
+![image](https://github.com/DenisStepanidenko/Web-interface-for-filling-in-tables/assets/110686828/39008e18-0c38-4b5e-9019-ec32ea1ff61e)
+
+При нажатии на кнопочку отправить, данная форма исчезает и возвращается старый интерфейс (сделано с помощью JS)
+
+И теперь посмотрим как выводится оборотная ведомость по исходным данным
+
+![image](https://github.com/DenisStepanidenko/Web-interface-for-filling-in-tables/assets/110686828/10a5a108-13b5-402f-84ba-be4abea0b738)
+
+
+
+
+
 
 
 
