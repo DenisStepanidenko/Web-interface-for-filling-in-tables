@@ -15,7 +15,7 @@ public class HomeController {
      * @throws SQLException исключение, которое генерируется SQL
      */
     @GetMapping("/home")
-    public String test() throws SQLException {
+    public String home() throws SQLException {
         return "personalAccount/home";
     }
 }

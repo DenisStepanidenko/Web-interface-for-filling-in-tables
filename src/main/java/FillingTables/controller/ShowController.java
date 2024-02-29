@@ -39,11 +39,4 @@ public class ShowController {
         return "personalAccount/show";
     }
 
-    @GetMapping("/test")
-    public String test(Model model) {
-
-        BigDecimal newSaldo = BigDecimal.valueOf(4343.543 + 312453.5343);
-        System.out.println(Double.parseDouble(String.valueOf(newSaldo)));
-        return "redirect:/home";
-    }
 }
